@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: bodeganube-postgres
+    environment:
+      POSTGRES_USER: bodeganube
+      POSTGRES_PASSWORD: bodeganube
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres/init:/docker-entrypoint-initdb.d
+
+  ms-auth:
+    build: ../ms-auth
+    container_name: ms-auth
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+  ms-ordenes:
+    build: ../ms-ordenes
+    container_name: ms-ordenes
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+
+  ms-inventario:
+    build: ../ms-inventario
+    container_name: ms-inventario
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+
+  ms-picking-service:
+    build: ../ms-picking-service
+    container_name: ms-picking-service
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres
