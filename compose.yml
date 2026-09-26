@@ -10,6 +10,12 @@ services:
     volumes:
       - ./postgres/init:/docker-entrypoint-initdb.d
 
+  mongo:
+    image: mongo:7
+    container_name: bodeganube-mongo
+    ports:
+      - "27017:27017"
+
   ms-auth:
     build: ../ms-auth
     container_name: ms-auth
@@ -40,4 +46,4 @@ services:
     ports:
       - "8084:8084"
     depends_on:
-      - postgres
+      - mongo
