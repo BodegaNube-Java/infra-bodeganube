@@ -15,12 +15,14 @@ Infraestructura general de BodegaNube para desarrollo local y despliegue.
 
 ```
 Comercio / Operario ──► API Gateway (JWT Authorizer) ──► ms-auth / ms-ordenes / ms-picking-service   (síncrono)
-Canal externo (webhook) ──► API Gateway ──► Amazon SQS ──► AWS Lambda ──► ms-ordenes / ms-inventario  (asíncrono)
+Canal externo (webhook) ──► API Gateway ──► Amazon SQS ──► AWS Lambda
                                                  │
-                                                 ▼
-                                                DLQ (reintentos agotados)
-
-ms-ordenes ──► ms-inventario   (consulta de stock, síncrono)
+                                                 ├─ 1. reserva stock ──► ms-inventario
+                                                 │      (sin stock → confirma mensaje, no reintenta)
+                                                 └─ 2. crea orden/dedup ──► ms-ordenes (solo si hubo stock)
+                                                 │
+                                                 ▼ (solo fallos técnicos)
+                                                DLQ
 ```
 
 ## Servicios locales (docker-compose)
@@ -48,7 +50,7 @@ Ver [`apigateway/routes.md`](./apigateway/routes.md) para el detalle de rutas.
 ## Colas (Amazon SQS)
 
 - `bodeganube-avisos-venta` — recibe los avisos de venta del webhook antes de ser procesados por la Lambda.
-- `bodeganube-avisos-venta-dlq` — Dead Letter Queue para mensajes que agotaron sus reintentos.
+- `bodeganube-avisos-venta-dlq` — Dead Letter Queue, solo para mensajes que agotaron reintentos por un fallo **técnico** (no por falta de stock, que es un resultado de negocio que la Lambda confirma sin reintentar).
 
 ## Base de datos
 
