@@ -7,8 +7,8 @@
 | GET | `/ordenes` | `ms-ordenes` | Síncrono | JWT (rol `COMERCIO`) |
 | GET | `/ordenes/{id}` | `ms-ordenes` | Síncrono | JWT (rol `COMERCIO`) |
 | GET | `/inventario/productos` | `ms-inventario` | Síncrono | JWT (rol `OPERARIO`, `COMERCIO`) |
-| GET | `/picking/ordenes` | `ms-picking-service` | Síncrono | JWT (rol `OPERARIO`) |
-| POST | `/picking/ordenes/{id}/despacho` | `ms-picking-service` | Síncrono | JWT (rol `OPERARIO`) |
+| GET | `/v1/picking/ordenes` | `ms-picking-service` | Síncrono | JWT (rol `OPERARIO`) |
+| POST | `/v1/picking/ordenes/{id}/despacho` | `ms-picking-service` | Síncrono | JWT (rol `OPERARIO`) |
 
 ## Orquestación asíncrona (Lambda)
 
