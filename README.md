@@ -330,18 +330,18 @@ curl http://localhost:8082/ordenes/disponibles
 ms-ordenes **todavía no avisa** a picking, así que este paso se hace a mano:
 
 ```bash
-curl -X POST http://localhost:8084/picking/ordenes \
+curl -X POST http://localhost:8084/v1/picking/ordenes \
   -H "Content-Type: application/json" \
   -d '{"ordenId":"ORDEN_ID","comercioId":"COMERCIO_ID"}'
 
-curl http://localhost:8084/picking/ordenes     # la orden aparece como DISPONIBLE
+curl http://localhost:8084/v1/picking/ordenes     # la orden aparece como DISPONIBLE
 ```
 
 ### 8.6 Despachar y descontar stock
 
 ```bash
 # Registra el despacho y genera el número de seguimiento (BN-XXXXXXXX)
-curl -X POST http://localhost:8084/picking/ordenes/ORDEN_ID/despacho
+curl -X POST http://localhost:8084/v1/picking/ordenes/ORDEN_ID/despacho
 
 # Confirma el descuento definitivo del stock reservado
 curl -X PATCH http://localhost:8083/inventario/PRODUCTO_ID/descuento \
